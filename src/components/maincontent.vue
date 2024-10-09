@@ -1,157 +1,120 @@
 <template>
-  <main class="container mx-auto mt-10 px-4">
-    <div class="relative rounded-lg overflow-hidden">
-      <img src="/sparring2.avif" alt="Fighters" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-end">
-        <div class="p-8 md:p-16 max-w-3xl text-right">
-          <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">Book your partner</h1>
-          <p class="mb-6 text-lg whitespace-nowrap overflow-hidden text-ellipsis text-white">Book your sparring session now and take your boxing skills to the next level!</p>
-          <form @submit.prevent="submitEmail" class="flex max-w-md ml-auto relative">
-            <div class="relative flex-grow overflow-hidden">
-              <div class="absolute inset-0 rounded-lg overflow-hidden">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  preserveAspectRatio="none"
-                  class="absolute h-full w-full"
-                  width="100%"
-                  height="100%">
-                  <rect ref="pathRef" fill="none" width="100%" height="100%" rx="30%" ry="30%" />
-                </svg>
-                <div
-                  class="absolute h-20 w-20 opacity-80 bg-gradient-radial from-red-500 to-transparent"
-                  :style="{ transform: borderTransform }">
-                </div>
-              </div>
-              <input
-                v-model="email"
-                type="email"
-                placeholder="Mike.Tyson@example.com"
-                :class="['relative w-full p-3 rounded-l bg-white text-black placeholder-gray-400 focus:outline-none z-10 transition-all duration-300 ease-in-out', 
-                         {'opacity-0 transform translate-y-full': isConfirmed}]"
-                :disabled="isConfirmed"
-              />
-              <div 
-                :class="['absolute inset-0 flex items-center justify-center bg-green-500 text-white rounded-l transition-all duration-300 ease-in-out transform', 
-                         {'translate-y-full': !isConfirmed}]"
-              >
-                <span class="ml-2">Enregistré !</span>
+  <div class="relative min-h-screen">
+    <Aurora />
+    <main class="relative z-10 text-white font-serif py-16">
+      <div class="container mx-auto px-4">
+        <div class="bg-black/30 backdrop-blur-md rounded-3xl overflow-hidden shadow-2xl">
+          <div class="relative">
+            <img src="/sparring2.avif" alt="Fighters" class="w-full h-[70vh] object-cover object-center" />
+            <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent flex items-center">
+              <div class="p-8 md:p-16 max-w-4xl">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white leading-tight whitespace-nowrap overflow-hidden" style="font-family: 'Playfair Display', serif;">
+                  Book your sparring partner
+                </h1>
+                <p class="mb-8 text-xl text-white">
+                  Elevate your skills with the perfect match. Book your session now and take your boxing to the next level!
+                </p>
+                <form @submit.prevent="submitEmail" class="flex max-w-md outline-none relative">
+                  <input
+                    v-model="email"
+                    type="email"
+                    placeholder="Mike.Tyson@example.com"
+                    class="flex-grow p-4 rounded-l-full bg-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
+                  />
+                  <button
+                    type="submit"
+                    class="bg-red-600 text-white p-4 rounded-r-full hover:bg-red-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </button>
+                </form>
               </div>
             </div>
-            <button
-              type="submit"
-              :class="['bg-red-900 text-white p-3 rounded-r transition duration-300', 
-                       {'bg-green-500': isConfirmed, 'hover:bg-green-500': !isConfirmed}]"
-              :disabled="isConfirmed"
-            >
-              <svg v-if="!isConfirmed" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div class="logo-carousel my-16">
-      <h2 class="text-3xl font-bold mb-8 text-center">Our sponsors</h2>
-      <div 
-        ref="logoContainerRef"
-        @mouseenter="pauseScroll"
-        @mouseleave="resumeScroll"
-        class="overflow-hidden"
-      >
-        <div 
-          class="flex transition-transform duration-[30000ms] ease-linear"
-          :style="{ transform: `translateX(${scrollPosition}px)` }"
-        >
-          <div 
-            v-for="(logo, index) in duplicatedLogos" 
-            :key="index"
-            class="flex-shrink-0 mx-4"
-          >
-            <img :src="logo.src" :alt="logo.name" class="h-20 object-contain" />
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Carrousel d'avis -->
-    <section class="testimonial-carousel mb-16">
-      <div class="relative max-w-6xl mx-auto px-4">
-        <div class="overflow-hidden">
-          <div class="flex transition-transform duration-300 ease-in-out" :style="{ transform: `translateX(-${currentTestimonialIndex * 100}%)` }">
-            <div v-for="(testimonial, index) in testimonials" :key="index" class="w-full flex-shrink-0 px-4">
-              <div class="bg-white rounded-lg shadow-lg p-8">
-                <h3 class="text-2xl font-bold mb-4 text-red-500">{{ testimonial.title }}</h3>
-                <p class="mb-6 text-gray-600">{{ testimonial.content }}</p>
-                <div class="flex items-center text-black">
-                  <img :src="testimonial.avatar" :alt="testimonial.name" class="w-12 h-12 rounded-full mr-4">
+        <div class="my-16">
+          <h2 class="text-4xl font-bold mb-12 text-center text-white" style="font-family: 'Playfair Display', serif;">Our sponsors</h2>
+          <div class="bg-black/30 backdrop-blur-md p-8 rounded-lg shadow-lg overflow-hidden">
+            <div class="flex animate-scroll">
+              <div v-for="(logo, index) in [...partnerLogos, ...partnerLogos]" :key="index" class="flex-shrink-0 w-1/5 p-4">
+                <img :src="logo.src" :alt="logo.name" class="w-full h-20 object-contain filter grayscale hover:grayscale-0 transition-all duration-300" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="py-20">
+          <h2 class="text-4xl md:text-5xl font-bold mb-8 text-center text-white" style="font-family: 'Playfair Display', serif;">
+            What Our Fighters Say
+          </h2>
+          <div class="text-center mb-12">
+            <span class="text-5xl font-bold text-white">4.8</span>
+            <div class="flex justify-center mt-2">
+              <svg v-for="_ in 5" :key="_" class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+            </div>
+            <p class="text-gray-300 mt-2">Over 10k user reviews</p>
+          </div>
+          
+          <div class="relative overflow-hidden">
+            <div class="flex transition-transform duration-300 ease-in-out" :style="{ transform: `translateX(-${currentTestimonialIndex * 33.333}%)` }">
+              <div v-for="(testimonial, index) in testimonials" :key="index" class="w-full md:w-1/3 flex-shrink-0 px-4">
+                <div class="bg-black/30 backdrop-blur-md p-6 rounded-lg shadow-lg h-full flex flex-col justify-between">
                   <div>
-                    <p class="font-semibold">{{ testimonial.name }}</p>
-                    <p class="text-sm text-gray-500">{{ testimonial.role }}</p>
+                    <h3 class="text-lg font-semibold mb-2 text-white">{{ testimonial.title }}</h3>
+                    <p class="text-gray-300 mb-4 text-sm">« {{ testimonial.content }} »</p>
+                  </div>
+                  <div class="flex items-center">
+                    <img :src="testimonial.avatar" :alt="testimonial.name" class="w-10 h-10 rounded-full mr-3">
+                    <div>
+                      <p class="font-semibold text-white text-sm">{{ testimonial.name }}</p>
+                      <p class="text-gray-300 text-xs">{{ testimonial.role }}</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            
+            <button @click="prevTestimonial" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-black/30 backdrop-blur-md rounded-full p-2 shadow-lg focus:outline-none hover:bg-black/50 transition duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button @click="nextTestimonial" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-black/30 backdrop-blur-md rounded-full p-2 shadow-lg focus:outline-none hover:bg-black/50 transition duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
-        </div>
-        <button @click="prevTestimonial" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button @click="nextTestimonial" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+          
+          <div class="flex justify-center mt-8">
+            <button v-for="(_, index) in Math.ceil(testimonials.length / 3)" :key="index" @click="goToTestimonial(index * 3)"
+                    :class="['w-3 h-3 rounded-full mx-2 focus:outline-none transition duration-300',
+                             Math.floor(currentTestimonialIndex / 3) === index ? 'bg-white' : 'bg-gray-500 hover:bg-gray-400']">
+            </button>
+          </div>
+        </section>
       </div>
-      <div class="flex justify-center mt-4">
-        <button v-for="(_, index) in testimonials" :key="index" @click="goToTestimonial(index)" :class="['w-3 h-3 rounded-full mx-1 focus:outline-none', currentTestimonialIndex === index ? 'bg-red-500' : 'bg-gray-300']"></button>
-      </div>
-    </section>
-  </main>
+    </main>
+  </div>
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, computed } from 'vue'
+import Aurora from './aurora.vue'
 
 export default {
   name: 'MainContent',
+  components: {
+    Aurora
+  },
   setup() {
-    const pathRef = ref(null)
-    const progress = ref(0)
-    const duration = 2000
-    let animationFrame
-
     const email = ref('')
     const isConfirmed = ref(false)
-
-    const animate = (time) => {
-      const length = pathRef.value?.getTotalLength()
-      if (length) {
-        const pxPerMillisecond = length / duration
-        progress.value = (time * pxPerMillisecond) % length
-      }
-      animationFrame = requestAnimationFrame(animate)
-    }
-
-    onMounted(() => {
-      animationFrame = requestAnimationFrame(animate)
-    })
-
-    onUnmounted(() => {
-      cancelAnimationFrame(animationFrame)
-    })
-
-    const borderTransform = computed(() => {
-      if (!pathRef.value) return ''
-      const point = pathRef.value.getPointAtLength(progress.value)
-      return `translateX(${point.x}px) translateY(${point.y}px) translateX(-50%) translateY(-50%)`
-    })
 
     const submitEmail = () => {
       if (validateEmail(email.value)) {
@@ -173,59 +136,76 @@ export default {
 
     const testimonials = [
       {
-        title: "Encompassing both training and nutrition",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id posuere lectus, sed elementum metus. Vestibulum vitae tellus ex. Ut efficitur justo vitae velit ornare lacinia. Duis vulputate posuere blandit. Integer ac quam nec nisi aliquet pellentesque. Nunc sit amet dui ex. Nulla facilisi. Etiam laoreet luctus purus. Etiam commodo mi nec leo vulputate egestas. Proin eget commodo ligula. Aliquam vitae nunc imperdiet, elementum nunc nec, posuere odio. In massa elit, feugiat sit amet maximus non, posuere at nisi. Suspendisse dictum convallis massa id pellentesque. Integer nec condimentum risus, vel ultrices quam. Phasellus molestie leo mauris, nec bibendum eros faucibus quis.",
+        title: "Progression Rapide",
+        content: "Thanks to regular sparring sessions, my technique has improved considerably in just a few months.",
         name: "Melvin Alex",
         avatar: "/public/1.jpg",
-        role: "Sparring JJB"
+        role: "Boxeur Amateur"
       },
       {
-        title: "Mike has an excellent right hook !",
-        content: "Lorem ipsum dolor sit amet,nteger nec condimentum risus, vel ultrices quam. Phasellus molestie leo mauris, nec bibendum eros faucibus quis.",
-        name: "Adolfo Quiroz",
+        title: "Quality Partners",
+        content: "I found high-level sparring partners who really pushed me to surpass myself.",
+        name: "Sarah Johnson",
         avatar: "/public/2.jpg",
-        role: "Sparring MMA"
+        role: "MMA Fighter"
       },
       {
-        title: "Awesome !",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id posuere lectus, sed elementum metus. Vestibulum vitae tellus ex. Ut efficitur justo vitae velit ornare lacinia. Duis vulputate posuere blandit. Integer ac quam nec nisi aliquet pellentesque. Nunc sit amet dui ex. Nulla facilisi. Etiam laoreet luctus purus. Etiam commodo mi nec leo vulputate egestas. Proin eget commodo ligula. Aliquam vitae nunc imperdiet, elementum nunc nec, posuere odio. In massa elit, feugiat sit amet maximus non, posuere at nisi. Suspendisse dictum convallis massa id pellentesque. Integer nec condimentum risus, vel ultrices quam. Phasellus molestie leo mauris, nec bibendum eros faucibus quis.",
-        name: "Paula Rodrigues",
+        title: "Incredible Flexibility",
+        content: "The ability to book sessions whenever I want has made my training much more effective.",
+        name: "Carlos Rodriguez",
         avatar: "/public/3.jpg",
-        role: "Sparring Muay Thai"
+        role: "Kickboxeur Pro"
       },
       {
-        title: "Teddy is a great teacher!",
-        content: "Lorem ipsum dolor sit amet,nteger nec condimentum risus, vel ultrices quam. Phasellus molestie leo mauris, nec bibendum eros faucibus quis.",
-        name: "Adolfo Quiroz",
+        title: "Communauté Motivante",
+        content: "I've met incredible people who share my passion. It's motivating to train together.",
+        name: "Aisha Patel",
         avatar: "/public/4.jpg",
-        role: "Sparring MMA"
+        role: "Pratiquante de Muay Thai"
       },
       {
-        title: "Great so far",
-        content: "Lorem ipsum dolor sit amet,nteger nec condimentum risus, vel ultrices quam. Phasellus molestie leo mauris, nec bibendum eros faucibus quis.",
-        name: "Adolfo Quiroz",
+        title: "Constant Evolution",
+        content: "Each new session brings me new challenges and learning opportunities. I am constantly progressing.",
+        name: "Lucas Dupont",
         avatar: "/public/5.jpg",
-        role: "Sparring boxe"
+        role: "Jiu-Jitsu Brésilien"
       },
+      {
+        title: "Boost de Confiance",
+        content: "Sparring with different partners has significantly boosted my confidence in the ring.",
+        name: "Emma Thompson",
+        avatar: "/public/6.jpg",
+        role: "Boxeuse Amateur"
+      },
+      {
+        title: "Technique Améliorée",
+        content: "The variety of styles I've encountered has greatly improved my overall technique.",
+        name: "Yuki Tanaka",
+        avatar: "/public/7.jpg",
+        role: "Karatéka"
+      },
+      {
+        title: "Préparation Optimale",
+        content: "This platform has been crucial in my preparation for competitions. Highly recommended!",
+        name: "Alexandre Dubois",
+        avatar: "/public/8.jpg",
+        role: "Lutteur Olympique"
+      }
     ]
 
     const currentTestimonialIndex = ref(0)
 
     const nextTestimonial = () => {
-      currentTestimonialIndex.value = (currentTestimonialIndex.value + 1) % testimonials.length
+      currentTestimonialIndex.value = (currentTestimonialIndex.value + 3) % testimonials.length
     }
 
     const prevTestimonial = () => {
-      currentTestimonialIndex.value = (currentTestimonialIndex.value - 1 + testimonials.length) % testimonials.length
+      currentTestimonialIndex.value = (currentTestimonialIndex.value - 3 + testimonials.length) % testimonials.length
     }
 
     const goToTestimonial = (index) => {
       currentTestimonialIndex.value = index
     }
-
-    const logoContainerRef = ref(null)
-    const scrollPosition = ref(0)
-    const isScrollPaused = ref(false)
 
     const partnerLogos = [
       { name: "Fitness Park", src: "FP.jpg" },
@@ -234,85 +214,96 @@ export default {
       { name: "On Air", src: "Onair.png" },
       { name: "GigaGYM", src: "Giga.jpg"},
     ]
-
-    const duplicatedLogos = computed(() => [...partnerLogos, ...partnerLogos])
-
-    const scrollLogos = () => {
-      if (!isScrollPaused.value) {
-        scrollPosition.value -= 1
-        if (Math.abs(scrollPosition.value) >= logoContainerRef.value.offsetWidth / 2) {
-          scrollPosition.value = 0
-        }
-      }
+    return {
+      email,
+      isConfirmed,
+      submitEmail,
+      testimonials,
+      currentTestimonialIndex,
+      nextTestimonial,
+      prevTestimonial,
+      goToTestimonial,
+      partnerLogos
     }
-
-    const pauseScroll = () => {
-      isScrollPaused.value = true
-    }
-
-    const resumeScroll = () => {
-      isScrollPaused.value = false
-    }
-
-    let scrollInterval
-
-    onMounted(() => {
-      animationFrame = requestAnimationFrame(animate)
-      scrollInterval = setInterval(scrollLogos, 10)
-    })
-
-    onUnmounted(() => {
-      cancelAnimationFrame(animationFrame)
-      clearInterval(scrollInterval) 
-    })
-
-return {
-  pathRef,
-  borderTransform,
-  email,
-  isConfirmed,
-  submitEmail,
-  testimonials,
-  currentTestimonialIndex,
-  nextTestimonial,
-  prevTestimonial,
-  goToTestimonial,
-  logoContainerRef,
-  scrollPosition,
-  duplicatedLogos,
-  pauseScroll,
-  resumeScroll,
-  partnerLogos
-}
-}
+  }
 }
 </script>
 
 <style scoped>
-@keyframes rotate {
-from {
-transform: rotate(0deg);
-}
-to {
-transform: rotate(360deg);
-}
+body {
+  background-color: #000000;
+  color: #ffffff;
 }
 
-.bg-gradient-radial {
-background: radial-gradient(circle, var(--tw-gradient-from) 40%, var(--tw-gradient-to) 60%);
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
 }
 
-
-
-.logo-carousel {
-overflow: hidden;
+.shadow-modern {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
 }
 
-.logo-carousel img {
-transition: transform 0.3s ease-in-out;
+.animate-scroll {
+  display: flex;
+  animation: scroll 30s linear infinite;
 }
 
-.logo-carousel img:hover {
-transform: scale(1.1);
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.bg-black\/30 {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.backdrop-blur-md {
+  backdrop-filter: blur(12px);
+}
+
+h1, h2, h3, p {
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+input, button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.testimonial-card {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.testimonial-nav-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.testimonial-nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Styles pour les indicateurs de pagination */
+.pagination-indicator {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.pagination-indicator.active {
+  background-color: white;
 }
 </style>
