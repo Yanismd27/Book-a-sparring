@@ -2,17 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+
 h1,
 h2,
 h3,
 h4,
-a {
-  font-family: 'Bonny', serif;
+a
+{
+  font-family: 'Boska', serif;
 }
 
-p,
 span {
-  font-family: 'Pilcrow Rounded', sans-serif;
+  font-family: 'Clash Display', sans-serif;
+}
+
+p {
+  font-family: 'General Sans', sans-serif;
 }
 
 /* :root {
